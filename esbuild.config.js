@@ -1,14 +1,25 @@
-import browserSync from "browser-sync";
-import chalk from "chalk";
-import del from "del";
-import esbuild from "esbuild";
-const { dev } = commandLineArgs({ name: "dev", type: Boolean });
-const bs = browserSync.create();
+const browserSync =  require("browser-sync");
+const esbuild =  require("esbuild");
 
-const esbuildConig = () => require('esbuild').buildSync({
-  entryPoints: ['src/app.js'],
-  bundle: true,
-  outfile: 'dist/dist.js'
+const bs = browserSync.create();
+bs.init({
+  server: true
 })
 
-esbuildConig();
+bs.watch('./dist/**/*.*').on('change', bs.reload);
+
+const esbuildScript = () => require('esbuild').build({
+  entryPoints: ['src/app.js'],
+  bundle: true,
+  watch: {
+    onRebuild(error, result) {
+      if (error) console.error('watch build failed:', error)
+      else console.log('watch build succeeded:', result)
+    },
+  },
+  outfile: 'dist/dist.js'
+}).then(result => {
+  console.log('watching...')
+})
+
+esbuildScript();

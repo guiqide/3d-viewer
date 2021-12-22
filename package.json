@@ -21,10 +21,12 @@
   "homepage": "https://github.com/guiqide/3d-viewer#readme",
   "devDependencies": {
     "@tencent/eslint-config-tencent": "^0.16.0",
+    "browser-sync": "^2.27.7",
     "cz-conventional-changelog": "^3.3.0"
   },
   "dependencies": {
-    "esbuild": "^0.14.6"
+    "esbuild": "^0.14.6",
+    "three": "^0.135.0"
   },
   "config": {
     "commitizen": {

@@ -1,1 +1,5 @@
-document.innerHTML('abc')
+import {init} from './tree'
+
+const container = document.querySelector('#app')
+
+init()
