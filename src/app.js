@@ -1,5 +1,7 @@
-import {init} from './tree'
+import Render from './render'
 
 const container = document.querySelector('#app')
 
-init()
+const render = new Render(container)
+
+render.view()
