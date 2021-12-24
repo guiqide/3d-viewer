@@ -3,13 +3,17 @@ const esbuild =  require("esbuild");
 
 const bs = browserSync.create();
 bs.init({
-  server: true
+  server: {
+    baseDir: "examples",
+    index: "index.html",
+    directory: true
+  }
 })
 
 bs.watch('./dist/**/*.*').on('change', bs.reload);
 
 const esbuildScript = () => require('esbuild').build({
-  entryPoints: ['src/app.js'],
+  entryPoints: ['src/app.ts'],
   bundle: true,
   watch: {
     onRebuild(error, result) {
@@ -17,7 +21,7 @@ const esbuildScript = () => require('esbuild').build({
       else console.log('watch build succeeded:', result)
     },
   },
-  outfile: 'dist/dist.js'
+  outfile: 'examples/dist.js'
 }).then(result => {
   console.log('watching...')
 })

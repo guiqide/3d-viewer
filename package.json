@@ -25,7 +25,9 @@
     "cz-conventional-changelog": "^3.3.0"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.178",
     "esbuild": "^0.14.6",
+    "lodash": "^4.17.21",
     "three": "^0.135.0"
   },
   "config": {
