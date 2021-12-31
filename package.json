@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "esbuild ./src/app.js --bundle --outfile=out.js --watch",
     "server": "browser-sync start index.html --server --file='dist/*'",
-    "dev": "node esbuild.config.js"
+    "dev": "node esbuild.config.js",
+    "demo": "node esbuild.config.demo.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.178",
+    "@types/three": "^0.135.0",
     "esbuild": "^0.14.6",
     "lodash": "^4.17.21",
     "three": "^0.135.0"
