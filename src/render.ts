@@ -111,10 +111,18 @@ export default class Render {
 		this.prevTime = 0;
 		this.scene = new Scene();
 		window.scene = this.scene;
+
 		const fov = options.preset === 'assetgenerator'
       ? 0.8 * 180 / Math.PI
       : 60;
-		this.defaultCamera = new PerspectiveCamera( fov, el.clientWidth / el.clientHeight, 0.01, 1000 );
+
+		// 摄像机视锥体长宽比
+		const aspect = el.clientWidth / el.clientHeight
+
+
+		this.defaultCamera = new PerspectiveCamera( fov, aspect, 0.01, 1000 );
+
+
 		this.activeCamera = this.defaultCamera;
 
 		this.scene.add(this.defaultCamera)
@@ -126,9 +134,10 @@ export default class Render {
 
 		this.options = _.merge({}, options)
 
+		// 镜头控制器
 		this.controls = new OrbitControls( this.defaultCamera, this.renderer.domElement );
-    this.controls.autoRotate = false;
-    this.controls.autoRotateSpeed = -10;
+    this.controls.autoRotate = true;
+    // this.controls.autoRotateSpeed = -10;
     this.controls.screenSpacePanning = true;
 		
 		this.container.appendChild(this.renderer.domElement);
@@ -150,7 +159,7 @@ export default class Render {
 				console.log(event);
 				
 			}).then((gltf) => {
-				console.log(url, gltf);
+				console.log(gltf);
 				
 				const scene = gltf.scene
 
@@ -174,6 +183,8 @@ export default class Render {
     } else {
       this.controls.enabled = false;
       this.content.traverse((node) => {
+				console.log(node);
+				
         if (node.isCamera && node.name === name) {
           this.activeCamera = node;
         }
@@ -211,7 +222,6 @@ export default class Render {
 
     }
 
-		console.log(this.defaultCamera);
 		this.setCamera(DEFAULT_CAMERA);
 		this.updateLights();
 		
@@ -280,6 +290,7 @@ export default class Render {
 
     const dt = (time - this.prevTime) / 1000;
 
+		// autoRotate
     this.controls.update();
     this.render();
 

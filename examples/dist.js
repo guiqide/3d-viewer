@@ -37934,7 +37934,8 @@
       this.scene = new Scene();
       window.scene = this.scene;
       const fov2 = options2.preset === "assetgenerator" ? 0.8 * 180 / Math.PI : 60;
-      this.defaultCamera = new PerspectiveCamera(fov2, el.clientWidth / el.clientHeight, 0.01, 1e3);
+      const aspect2 = el.clientWidth / el.clientHeight;
+      this.defaultCamera = new PerspectiveCamera(fov2, aspect2, 0.01, 1e3);
       this.activeCamera = this.defaultCamera;
       this.scene.add(this.defaultCamera);
       this.container = el;
@@ -37943,8 +37944,7 @@
       this.renderer.setSize(el.clientWidth, el.clientHeight);
       this.options = import_lodash.default.merge({}, options2);
       this.controls = new OrbitControls(this.defaultCamera, this.renderer.domElement);
-      this.controls.autoRotate = false;
-      this.controls.autoRotateSpeed = -10;
+      this.controls.autoRotate = true;
       this.controls.screenSpacePanning = true;
       this.container.appendChild(this.renderer.domElement);
     }
@@ -37955,7 +37955,7 @@
         loader.loadAsync(url, (event) => {
           console.log(event);
         }).then((gltf) => {
-          console.log(url, gltf);
+          console.log(gltf);
           const scene = gltf.scene;
           if (!scene) {
             throw new Error("No scene found in gltf");
@@ -37974,6 +37974,7 @@
       } else {
         this.controls.enabled = false;
         this.content.traverse((node) => {
+          console.log(node);
           if (node.isCamera && node.name === name) {
             this.activeCamera = node;
           }
@@ -38002,7 +38003,6 @@
         this.defaultCamera.position.z += size / 2;
         this.defaultCamera.lookAt(center);
       }
-      console.log(this.defaultCamera);
       this.setCamera(DEFAULT_CAMERA);
       this.updateLights();
       this.controls.saveState();

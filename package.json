@@ -23,7 +23,8 @@
   "devDependencies": {
     "@tencent/eslint-config-tencent": "^0.16.0",
     "browser-sync": "^2.27.7",
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "lerna": "^4.0.0"
   },
   "dependencies": {
     "@types/lodash": "^4.14.178",
