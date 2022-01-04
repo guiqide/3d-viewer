@@ -1,5 +1,5 @@
 {
-  "name": "examples",
+  "name": "3d-viewer-examples",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "kevingui <kevingui@tencent.com>",
@@ -22,5 +22,8 @@
   },
   "bugs": {
     "url": "https://github.com/guiqide/3d-viewer/issues"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.27.7"
   }
 }
