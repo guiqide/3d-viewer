@@ -23,7 +23,8 @@
   "bugs": {
     "url": "https://github.com/guiqide/3d-viewer/issues"
   },
-  "devDependencies": {
-    "browser-sync": "^2.27.7"
+  "dependencies": {
+    "3d-viewer-core": "file:../core",
+    "3d-viewer-encode": "file:../encode"
   }
 }

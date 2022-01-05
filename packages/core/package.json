@@ -22,5 +22,9 @@
   },
   "bugs": {
     "url": "https://github.com/guiqide/3d-viewer/issues"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "three": "^0.136.0"
   }
 }
