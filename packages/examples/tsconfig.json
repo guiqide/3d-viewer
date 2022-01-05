@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-
+  "module": "js",
   "compilerOptions": {
     "outDir": "./lib"
   },
