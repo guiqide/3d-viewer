@@ -1,11 +1,10 @@
-# `core`
+import threeDViewer from '3d-viewer-core'
 
-> TODO: description
+const options = {
+  kiosk: false,
+  model: '',
+  preset: '',
+  cameraPosition: null
+};
 
-## Usage
-
-```
-const core = require('core');
-
-// TODO: DEMONSTRATE API
-```
+new threeDViewer(container, options)
