@@ -182,9 +182,9 @@ export default class ThreeDViewer {
     } else {
       this.controls.enabled = false;
       this.content.traverse((node) => {
-        if (node?.isCamera && node.name === name) {
-          this.activeCamera = node;
-        }
+        // if (node?.isCamera && node.name === name) {
+        //   this.activeCamera = node;
+        // }
       });
     }
   }

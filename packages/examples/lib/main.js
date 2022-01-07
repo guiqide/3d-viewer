@@ -1,9 +1,34 @@
-import * as THREE from 'three';
-import { LoadingManager, REVISION, Scene, PerspectiveCamera, WebGLRenderer, Box3, Vector3, HemisphereLight, AmbientLight, DirectionalLight } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import require$$0 from 'three';
+import require$$1 from 'three/examples/jsm/loaders/GLTFLoader.js';
+import require$$2 from 'three/examples/jsm/loaders/DRACOLoader.js';
+import require$$3 from 'three/examples/jsm/loaders/KTX2Loader.js';
+import require$$4 from 'three/examples/jsm/controls/OrbitControls.js';
+
+var THREE = require$$0;
+var GLTFLoader_js = require$$1;
+var DRACOLoader_js = require$$2;
+var KTX2Loader_js = require$$3;
+var OrbitControls_js = require$$4;
+
+function _interopNamespace(e) {
+	if (e && e.__esModule) return e;
+	var n = Object.create(null);
+	if (e) {
+		Object.keys(e).forEach(function (k) {
+			if (k !== 'default') {
+				var d = Object.getOwnPropertyDescriptor(e, k);
+				Object.defineProperty(n, k, d.get ? d : {
+					enumerable: true,
+					get: function () { return e[k]; }
+				});
+			}
+		});
+	}
+	n["default"] = e;
+	return Object.freeze(n);
+}
+
+var THREE__namespace = /*#__PURE__*/_interopNamespace(THREE);
 
 // This file is part of meshoptimizer library and is distributed under the terms of MIT License.
 // Copyright (C) 2016-2020, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
@@ -115,11 +140,11 @@ var MeshoptDecoder = (function() {
 	};
 })();
 
-window.THREE = THREE;
-var MANAGER = new LoadingManager();
-var THREE_PATH = "https://unpkg.com/three@0.".concat(REVISION, ".x");
-var DRACO_LOADER = new DRACOLoader(MANAGER).setDecoderPath("".concat(THREE_PATH, "/examples/js/libs/draco/gltf/"));
-var KTX2_LOADER = new KTX2Loader(MANAGER).setTranscoderPath("".concat(THREE_PATH, "/examples/js/libs/basis/"));
+window.THREE = THREE__namespace;
+var MANAGER = new THREE.LoadingManager();
+var THREE_PATH = "https://unpkg.com/three@0.".concat(THREE.REVISION, ".x");
+var DRACO_LOADER = new DRACOLoader_js.DRACOLoader(MANAGER).setDecoderPath("".concat(THREE_PATH, "/examples/js/libs/draco/gltf/"));
+var KTX2_LOADER = new KTX2Loader_js.KTX2Loader(MANAGER).setTranscoderPath("".concat(THREE_PATH, "/examples/js/libs/basis/"));
 var DEFAULT_CAMERA = '[default]';
 var Preset = { ASSET_GENERATOR: 'assetgenerator' };
 var ThreeDViewer = /** @class */ (function () {
@@ -148,23 +173,23 @@ var ThreeDViewer = /** @class */ (function () {
         };
         this.lights = [];
         this.prevTime = 0;
-        this.scene = new Scene();
+        this.scene = new THREE.Scene();
         window.scene = this.scene;
         var fov = options.preset === 'assetgenerator'
             ? 0.8 * 180 / Math.PI
             : 60;
         // 摄像机视锥体长宽比
         var aspect = el.clientWidth / el.clientHeight;
-        this.defaultCamera = new PerspectiveCamera(fov, aspect, 0.01, 1000);
+        this.defaultCamera = new THREE.PerspectiveCamera(fov, aspect, 0.01, 1000);
         this.activeCamera = this.defaultCamera;
         this.scene.add(this.defaultCamera);
         this.container = el;
-        this.renderer = window.renderer = new WebGLRenderer({ antialias: true });
+        this.renderer = window.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(el.clientWidth, el.clientHeight);
         this.options = Object.assign({}, options);
         // 镜头控制器
-        this.controls = new OrbitControls(this.defaultCamera, this.renderer.domElement);
+        this.controls = new OrbitControls_js.OrbitControls(this.defaultCamera, this.renderer.domElement);
         this.controls.autoRotate = true;
         // this.controls.autoRotateSpeed = -10;
         this.controls.screenSpacePanning = true;
@@ -174,7 +199,7 @@ var ThreeDViewer = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             console.log(url);
-            var loader = new GLTFLoader(MANAGER)
+            var loader = new GLTFLoader_js.GLTFLoader(MANAGER)
                 .setCrossOrigin('anonymous')
                 .setDRACOLoader(DRACO_LOADER)
                 .setKTX2Loader(KTX2_LOADER.detectSupport(_this.renderer))
@@ -195,7 +220,6 @@ var ThreeDViewer = /** @class */ (function () {
         });
     };
     ThreeDViewer.prototype.setCamera = function (name) {
-        var _this = this;
         if (name === DEFAULT_CAMERA) {
             this.controls.enabled = true;
             this.activeCamera = this.defaultCamera;
@@ -203,16 +227,16 @@ var ThreeDViewer = /** @class */ (function () {
         else {
             this.controls.enabled = false;
             this.content.traverse(function (node) {
-                if ((node === null || node === void 0 ? void 0 : node.isCamera) && node.name === name) {
-                    _this.activeCamera = node;
-                }
+                // if (node?.isCamera && node.name === name) {
+                //   this.activeCamera = node;
+                // }
             });
         }
     };
     ThreeDViewer.prototype.setContent = function (object) {
-        var box = new Box3().setFromObject(object);
-        var size = box.getSize(new Vector3()).length();
-        var center = box.getCenter(new Vector3());
+        var box = new THREE.Box3().setFromObject(object);
+        var size = box.getSize(new THREE.Vector3()).length();
+        var center = box.getCenter(new THREE.Vector3());
         this.controls.reset();
         object.position.x += (object.position.x - center.x);
         object.position.y += (object.position.y - center.y);
@@ -223,7 +247,7 @@ var ThreeDViewer = /** @class */ (function () {
         this.defaultCamera.updateProjectionMatrix();
         if (this.options.cameraPosition) {
             this.defaultCamera.position.fromArray(this.options.cameraPosition);
-            this.defaultCamera.lookAt(new Vector3());
+            this.defaultCamera.lookAt(new THREE.Vector3());
         }
         else {
             this.defaultCamera.position.copy(center);
@@ -260,16 +284,16 @@ var ThreeDViewer = /** @class */ (function () {
     ThreeDViewer.prototype.addLights = function () {
         var state = this.state;
         if (this.options.preset === Preset.ASSET_GENERATOR) {
-            var hemiLight = new HemisphereLight();
+            var hemiLight = new THREE.HemisphereLight();
             hemiLight.name = 'hemi_light';
             this.scene.add(hemiLight);
             this.lights.push(hemiLight);
             return;
         }
-        var light1 = new AmbientLight(state.ambientColor, state.ambientIntensity);
+        var light1 = new THREE.AmbientLight(state.ambientColor, state.ambientIntensity);
         light1.name = 'ambient_light';
         this.defaultCamera.add(light1);
-        var light2 = new DirectionalLight(state.directColor, state.directIntensity);
+        var light2 = new THREE.DirectionalLight(state.directColor, state.directIntensity);
         light2.position.set(0.5, 0, 0.866); // ~60º
         light2.name = 'main_light';
         this.defaultCamera.add(light2);
@@ -300,6 +324,8 @@ var ThreeDViewer = /** @class */ (function () {
     return ThreeDViewer;
 }());
 
+var core = ThreeDViewer;
+
 var container = document.querySelector('#app');
 var options = {
     kiosk: false,
@@ -307,7 +333,7 @@ var options = {
     preset: '',
     cameraPosition: null
 };
-var viewer = new ThreeDViewer(container, options);
+var viewer = new core(container, options);
 var transferUrl = function (url) {
     return typeof url === 'string'
         ? url

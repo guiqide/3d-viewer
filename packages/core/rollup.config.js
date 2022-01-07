@@ -4,8 +4,7 @@ export default {
   input: './src/main.ts',
   output: {
     file: './lib/core.js',
-    format: 'esm',
-    name: 'ThreeDViewer',
+    format: 'cjs',
     exports: 'auto'
   },
   plugins: [typescript({
