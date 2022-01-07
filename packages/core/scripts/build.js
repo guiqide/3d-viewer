@@ -43,6 +43,16 @@ const inputOptions = {
   plugins: pluginOptions
 }
 
+exports.module = {
+  outputCommonJSOptions,
+  outputESMOptions,
+  outputRuntimeOptions,
+  pluginOptions,
+  external,
+  inputOptions,
+  build,
+}
+
 async function build() {
   if (process.env.NODE_ENV === 'production') {
     const bundleWithRuntime = await rollup.rollup(inputOptions)

@@ -1,6 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import htmlTemplate from 'rollup-plugin-generate-html-template';
 import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default {
   input: 'src/main.ts',
@@ -16,5 +17,6 @@ export default {
       target: 'lib/index.html'
     }),
     commonjs(),
+    nodeResolve()
   ]
 };

@@ -18,7 +18,7 @@ const transferUrl = (url: string) => {
       : URL.createObjectURL(url);
 }
 
-viewer.load(transferUrl('./assets/models/skate.glb')).then((gltf) => {
+viewer.load(transferUrl('./skate.glb')).then((gltf) => {
   console.log(gltf);
 })
 

@@ -21,7 +21,7 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "node ./scripts/build.js",
-    "dev": "rollup -c ./rollup.config.js -w"
+    "dev": "rollup -c scripts/dev.js -w"
   },
   "bugs": {
     "url": "https://github.com/guiqide/3d-viewer/issues"
