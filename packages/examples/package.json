@@ -1,6 +1,6 @@
 {
   "name": "3d-viewer-examples",
-  "version": "1.0.1-alpha.2",
+  "version": "1.0.1-alpha.3",
   "description": "> TODO: description",
   "author": "kevingui <kevingui@tencent.com>",
   "homepage": "https://github.com/guiqide/3d-viewer/tree/main/packages/examples#readme",
@@ -35,7 +35,7 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "3d-viewer": "^1.0.1-alpha.2",
+    "3d-viewer": "^1.0.1-alpha.3",
     "express": "^4.17.2"
   },
   "gitHead": "f781b032cbcb2c7acd0942797e91895689a387da"
