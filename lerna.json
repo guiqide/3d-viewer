@@ -9,6 +9,5 @@
     "registry": "https://mirrors.tencent.com/npm/",
     "ignoreChanges": ["*.md"]
   },
-  "registry": "https://mirrors.tencent.com/npm/",
   "version": "independent"
 }

@@ -37,5 +37,6 @@
   "dependencies": {
     "3d-viewer-core": "^1.0.1-alpha.1",
     "express": "^4.17.2"
-  }
+  },
+  "gitHead": "f781b032cbcb2c7acd0942797e91895689a387da"
 }

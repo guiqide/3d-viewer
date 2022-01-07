@@ -35,5 +35,6 @@
     "@tencent/eslint-config-tencent": "^0.16.0",
     "rollup": "^2.63.0",
     "typescript": "^4.5.4"
-  }
+  },
+  "gitHead": "f781b032cbcb2c7acd0942797e91895689a387da"
 }
