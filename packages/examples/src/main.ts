@@ -1,4 +1,4 @@
-import threeDViewer from '3d-viewer-core';
+import ThreeDViewer from '3d-viewer-core';
 
 const container = document.querySelector('#app')
 
@@ -10,7 +10,7 @@ const options = {
   cameraPosition: null
 };
 
-const render = new threeDViewer(container, options)
+const viewer = new ThreeDViewer(container, options)
 
 const transferUrl = (url: string) => {
   return typeof url === 'string'
@@ -18,8 +18,8 @@ const transferUrl = (url: string) => {
       : URL.createObjectURL(url);
 }
 
-render.load(transferUrl('./assets/models/skate.glb')).then((gltf) => {
+viewer.load(transferUrl('./assets/models/skate.glb')).then((gltf) => {
   console.log(gltf);
 })
 
-render.render()
+viewer.render()

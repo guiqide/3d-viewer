@@ -4,7 +4,7 @@ export default {
   input: './src/main.ts',
   output: {
     file: './lib/core.js',
-    format: 'umd',
+    format: 'esm',
     name: 'ThreeDViewer',
     exports: 'auto'
   },
