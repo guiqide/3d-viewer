@@ -17,13 +17,11 @@ import {
 	Light,
 	PerspectiveCamera,
 	AmbientLight,
+	Object3D,
 	DirectionalLight,
 	HemisphereLight,
 	Group,
 } from 'three'
-import * as THREE from 'three'
-
-window.THREE = THREE
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
@@ -74,7 +72,7 @@ export default class ThreeDViewer {
 	renderer: any;
 	content: Group;
 	defaultCamera: PerspectiveCamera;
-	activeCamera: PerspectiveCamera | THREE.Object3D;
+	activeCamera: PerspectiveCamera | Object3D;
 	prevTime: number;
 	controls: OrbitControls;
 	state: StateProps;

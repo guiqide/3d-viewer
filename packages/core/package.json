@@ -1,5 +1,5 @@
 {
-  "name": "3d-viewer",
+  "name": "3d-viewer-core",
   "version": "1.0.1-alpha.3",
   "description": "render",
   "author": "kevingui <kevingui@tencent.com>",
@@ -31,10 +31,12 @@
     "three": "^0.136.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.3",
     "@rollup/plugin-typescript": "^8.3.0",
     "@tencent/eslint-config-tencent": "^0.16.0",
     "rollup": "^2.63.0",
     "typescript": "^4.5.4"
   },
-  "gitHead": "f781b032cbcb2c7acd0942797e91895689a387da"
+  "gitHead": "20c22f70d0ba91b41c7a2737f2818fed3ddd180a"
 }

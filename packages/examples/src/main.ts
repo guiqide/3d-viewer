@@ -1,4 +1,4 @@
-import ThreeDViewer from '3d-viewer';
+import ThreeDViewer from '3d-viewer-core';
 
 const container = document.querySelector('#app')
 

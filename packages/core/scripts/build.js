@@ -1,5 +1,7 @@
 const rollup = require('rollup');
 const typescript = require('@rollup/plugin-typescript');
+const nodeResolve = require('@rollup/plugin-node-resolve').nodeResolve;
+const commonjs = require('@rollup/plugin-commonjs');
 const path = require('path');
 
 
@@ -16,9 +18,25 @@ const outputESMOptions = {
   exports: 'auto'
 }
 
+const outputRuntimeOptions = {
+  file: './lib/core.runtime.js',
+  format: 'umd',
+  name: 'ThreeDViewer',
+  exports: 'auto'
+}
+
 const pluginOptions = [typescript({
   tsconfig: path.resolve('./tsconfig.json')
-})]
+}), nodeResolve(), commonjs()]
+
+const external = [
+  'three',
+  'three/examples/jsm/loaders/GLTFLoader.js',
+  'three/examples/jsm/loaders/DRACOLoader.js',
+  'three/examples/jsm/loaders/KTX2Loader.js',
+  'three/examples/jsm/controls/OrbitControls.js',
+  'three/examples/jsm/libs/meshopt_decoder.module.js'
+]
 
 const inputOptions = {
   input: './src/main.ts',
@@ -27,19 +45,31 @@ const inputOptions = {
 
 async function build() {
   if (process.env.NODE_ENV === 'production') {
-    const bundle = await rollup.rollup(inputOptions)
+    const bundleWithRuntime = await rollup.rollup(inputOptions)
+    const buidleWithExternal = await rollup.rollup({...inputOptions, external})
 
-    const { output } = await bundle.generate(outputOptions);
-  
-    console.log(output);
+    await buidleWithExternal.write(outputCommonJSOptions);
+
+    await buidleWithExternal.write(outputESMOptions);
+
+    await buidleWithExternal.close();
+
+    await bundleWithRuntime.write(outputRuntimeOptions);
+
+    await bundleWithRuntime.close();
   } else {
-    const bundle = await rollup.rollup(inputOptions)
+    const bundleWithRuntime = await rollup.rollup(inputOptions)
+    const buidleWithExternal = await rollup.rollup({...inputOptions, external})
 
-    await bundle.write(outputCommonJSOptions);
+    await buidleWithExternal.write(outputCommonJSOptions);
 
-    await bundle.write(outputESMOptions);
+    await buidleWithExternal.write(outputESMOptions);
 
-    await bundle.close();
+    await buidleWithExternal.close();
+
+    await bundleWithRuntime.write(outputRuntimeOptions);
+
+    await bundleWithRuntime.close();
 
   }
 }
