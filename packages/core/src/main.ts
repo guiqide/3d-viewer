@@ -98,7 +98,7 @@ export default class ThreeDViewer {
       textureEncoding: 'sRGB',
       ambientIntensity: 0.3,
       ambientColor: 0xFFFFFF,
-      directIntensity: 0.8 * Math.PI, // TODO(#116)
+      directIntensity: 0.8 * Math.PI,
       directColor: 0xFFFFFF,
       bgColor1: '#ffffff',
       bgColor2: '#353535'
@@ -143,8 +143,6 @@ export default class ThreeDViewer {
 
 	load(url: string) {
 		return new Promise((resolve, reject) => {
-			console.log(url);
-			
 
 			const loader = new GLTFLoader(MANAGER)
 			.setCrossOrigin('anonymous')
@@ -153,7 +151,6 @@ export default class ThreeDViewer {
 			.setMeshoptDecoder( MeshoptDecoder );
 
 			loader.loadAsync(url, (event) => {
-				console.log(event);
 				
 			}).then((gltf) => {
 				console.log(gltf);

@@ -57774,14 +57774,12 @@ var ThreeDViewer = /** @class */ (function () {
     ThreeDViewer.prototype.load = function (url) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            console.log(url);
             var loader = new GLTFLoader_js.GLTFLoader(MANAGER)
                 .setCrossOrigin('anonymous')
                 .setDRACOLoader(DRACO_LOADER)
                 .setKTX2Loader(KTX2_LOADER.detectSupport(_this.renderer))
                 .setMeshoptDecoder(meshopt_decoder_module_js.MeshoptDecoder);
             loader.loadAsync(url, function (event) {
-                console.log(event);
             }).then(function (gltf) {
                 console.log(gltf);
                 var scene = gltf.scene;

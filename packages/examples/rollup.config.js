@@ -2,6 +2,8 @@ import typescript from '@rollup/plugin-typescript';
 import htmlTemplate from 'rollup-plugin-generate-html-template';
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import serve from 'rollup-plugin-serve'
+
 
 export default {
   input: 'src/main.ts',
@@ -12,10 +14,12 @@ export default {
   plugins: [
     typescript({
       tsconfig: './tsconfig.json'
-    }), htmlTemplate({
+    }),
+    htmlTemplate({
       template: 'public/index.html',
       target: 'lib/index.html'
     }),
+    serve('lib'),
     commonjs(),
     nodeResolve()
   ]

@@ -12,7 +12,7 @@ const options = {
 
 const viewer = new ThreeDViewer(container, options)
 
-const transferUrl = (url: string) => {
+const transferUrl = (url) => {
   return typeof url === 'string'
       ? url
       : URL.createObjectURL(url);
@@ -20,6 +20,7 @@ const transferUrl = (url: string) => {
 
 viewer.load(transferUrl('./skate.glb')).then((gltf) => {
   console.log(gltf);
+  
 })
 
 viewer.render()
