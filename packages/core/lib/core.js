@@ -373,11 +373,11 @@ var ThreeDViewer = /** @class */ (function (_super) {
                 .setDRACOLoader(DRACO_LOADER)
                 .setKTX2Loader(KTX2_LOADER.detectSupport(_this.renderer))
                 .setMeshoptDecoder(meshopt_decoder_module_js.MeshoptDecoder);
-            _this.emit('preLoad', [loader], _this);
+            _this.emit('preLoad', [loader, _this], _this);
             loader.loadAsync(url, function (event) {
-                _this.emit('loading', [event], _this);
+                _this.emit('loading', [event, _this], _this);
             }).then(function (gltf) {
-                _this.emit('loaded', [gltf], _this);
+                _this.emit('loaded', [gltf, _this], _this);
                 var scene = gltf.scene;
                 if (!scene) {
                     throw new Error('No scene found in gltf');

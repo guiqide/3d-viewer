@@ -58083,11 +58083,11 @@ var ThreeDViewer = /** @class */ (function (_super) {
                 .setDRACOLoader(DRACO_LOADER)
                 .setKTX2Loader(KTX2_LOADER.detectSupport(_this.renderer))
                 .setMeshoptDecoder(meshopt_decoder_module_js.MeshoptDecoder);
-            _this.emit('preLoad', [loader], _this);
+            _this.emit('preLoad', [loader, _this], _this);
             loader.loadAsync(url, function (event) {
-                _this.emit('loading', [event], _this);
+                _this.emit('loading', [event, _this], _this);
             }).then(function (gltf) {
-                _this.emit('loaded', [gltf], _this);
+                _this.emit('loaded', [gltf, _this], _this);
                 var scene = gltf.scene;
                 if (!scene) {
                     throw new Error('No scene found in gltf');
@@ -58229,16 +58229,12 @@ var options = {
 };
 var viewer = new core(container, options);
 // 这些钩子
-viewer.on('preLoad', function (viewer) {
+viewer.on('preLoad', function (loader, threedViewer) {
 });
-viewer.on('loading', function (viewer) {
+viewer.on('loading', function (event, threedViewer) {
 });
-viewer.on('loaded', function (viewer) {
+viewer.on('loaded', function (gltf, threedViewer) {
     console.log(viewer);
-});
-viewer.on('preRender', function (viewer) {
-});
-viewer.on('rendered', function (viewer) {
 });
 var transferUrl = function (url) {
     return typeof url === 'string'

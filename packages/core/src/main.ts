@@ -188,12 +188,12 @@ export default class ThreeDViewer extends EventEmitter {
 			.setDRACOLoader( DRACO_LOADER )
 			.setKTX2Loader(KTX2_LOADER.detectSupport( this.renderer ))
 			.setMeshoptDecoder( MeshoptDecoder );
-			this.emit('preLoad', [loader], this)
+			this.emit('preLoad', [loader, this], this)
 
 			loader.loadAsync(url, (event) => {
-				this.emit('loading', [event], this)
+				this.emit('loading', [event, this], this)
 			}).then((gltf) => {
-				this.emit('loaded', [gltf], this)
+				this.emit('loaded', [gltf, this], this)
 				
 				const scene = gltf.scene
 

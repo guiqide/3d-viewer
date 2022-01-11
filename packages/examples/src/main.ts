@@ -20,23 +20,15 @@ const viewer = new ThreeDViewer(container, options)
 
 // 这些钩子
 
-viewer.on('preLoad', (viewer) => {
+viewer.on('preLoad', (loader, threedViewer) => {
 
 })
 
-viewer.on('loading', (viewer) => {
+viewer.on('loading', (event, threedViewer) => {
 })
 
-viewer.on('loaded', (viewer) => {
+viewer.on('loaded', (gltf, threedViewer) => {
   console.log(viewer)
-})
-
-viewer.on('preRender', (viewer) => {
-
-})
-
-viewer.on('rendered', (viewer) => {
-
 })
 
 const transferUrl = (url) => {

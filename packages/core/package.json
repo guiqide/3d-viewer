@@ -29,8 +29,7 @@
   },
   "dependencies": {
     "@types/three": "^0.136.1",
-    "three": "^0.136.0",
-    "three-vignette-background": "^1.0.3"
+    "three": "^0.136.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",

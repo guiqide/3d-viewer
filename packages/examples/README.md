@@ -1,11 +1,3 @@
-# `examples`
+# 3d-viewer-examples
 
-> TODO: description
-
-## Usage
-
-```
-const examples = require('examples');
-
-// TODO: DEMONSTRATE API
-```
+通过npm install后即可在本地查看渲染效果，并且测试配置
