@@ -15,14 +15,17 @@ import {
 	Vector3,
 	REVISION,
 	Light,
+	Mesh,
 	PerspectiveCamera,
 	AmbientLight,
 	Object3D,
 	DirectionalLight,
 	HemisphereLight,
 	Group,
+	Line,
 } from 'three'
 
+import Stats from 'three/examples/jsm/libs/stats.module'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
@@ -33,19 +36,30 @@ const THREE_PATH = `https://unpkg.com/three@0.${REVISION}.x`
 const DRACO_LOADER = new DRACOLoader( MANAGER ).setDecoderPath( `${THREE_PATH}/examples/js/libs/draco/gltf/` );
 const KTX2_LOADER = new KTX2Loader( MANAGER ).setTranscoderPath( `${THREE_PATH}/examples/js/libs/basis/` );
 
+import EventEmitter from './utils/EventEmitter';
+import createBackground from './utils/background'
+
 interface OptionProps {
 	encode: boolean;
 	kiosk: boolean;
 	model: string;
 	preset: string;
 	cameraPosition: number[];
+	autoRotate: boolean; // 是否自动旋转
+	autoRotateSpeed: number; // 自动旋转速度
+	stats: boolean; // 是否开启帧数显示
+	isBgColor: boolean; // 是否开启背景颜色
+	bgColor1: string; // 光照背景色1
+	bgColor2: string; // 光照背景色2
+	ambientIntensity: number; // 环境光强度
+	ambientColor: number; // 环境光颜色
+	directIntensity: number; // 平行光强度
+	directColor: number;  // 平行光颜色
 }
 
 const DEFAULT_CAMERA = '[default]';
 interface StateProps {
 	environment?: string;
-	background: boolean;
-	playbackSpeed: number;
 	actionStates: object;
 	camera: string;
 	wireframe: boolean;
@@ -54,17 +68,25 @@ interface StateProps {
 	addLights: boolean;
 	exposure: number;
 	textureEncoding: string;
-	ambientIntensity: number;
-	ambientColor: number;
-	directIntensity: number;
-	directColor: number;
-	bgColor1: string;
-	bgColor2: string;
 }
 
 const Preset = {ASSET_GENERATOR: 'assetgenerator'};
 
-export default class ThreeDViewer {
+const defaultOptions = {
+	stats: false,
+	background: false,
+	isBgColor: true,
+	autoRotate: false,
+	autoRotateSpeed: 1.0,
+	bgColor1: '#ffffff',
+	bgColor2: '#353535',
+	ambientIntensity: 0.3,
+  ambientColor: 0xFFFFFF,
+	directIntensity: 0.8 * Math.PI,
+  directColor: 0xFFFFFF,
+}
+
+export default class ThreeDViewer extends EventEmitter {
 	options: OptionProps;
 	container: Element;
 	scene: Scene;
@@ -76,16 +98,19 @@ export default class ThreeDViewer {
 	prevTime: number;
 	controls: OrbitControls;
 	state: StateProps;
+	stats: Stats;
+	bg: Mesh
 
 	constructor(el: Element, options) {
+		super()
 		
 		if (!(el instanceof Element)) {
 			throw new Error('ThreeDViewer needs a DOM element to render to')
 		}
 
+		this.options = Object.assign({}, defaultOptions, options)
+
 		this.state = {
-      background: false,
-      playbackSpeed: 1.0,
       actionStates: {},
       camera: DEFAULT_CAMERA,
       wireframe: false,
@@ -96,18 +121,12 @@ export default class ThreeDViewer {
       addLights: true,
       exposure: 1.0,
       textureEncoding: 'sRGB',
-      ambientIntensity: 0.3,
-      ambientColor: 0xFFFFFF,
-      directIntensity: 0.8 * Math.PI,
-      directColor: 0xFFFFFF,
-      bgColor1: '#ffffff',
-      bgColor2: '#353535'
     };
 		
+
 		this.lights = []
 		this.prevTime = 0;
 		this.scene = new Scene();
-		window.scene = this.scene;
 
 		const fov = options.preset === 'assetgenerator'
       ? 0.8 * 180 / Math.PI
@@ -117,6 +136,8 @@ export default class ThreeDViewer {
 		const aspect = el.clientWidth / el.clientHeight
 
 
+		// 初始化摄像机，视锥体
+		// https://threejs.org/docs/#api/en/cameras/PerspectiveCamera
 		this.defaultCamera = new PerspectiveCamera( fov, aspect, 0.01, 1000 );
 
 
@@ -125,19 +146,37 @@ export default class ThreeDViewer {
 		this.scene.add(this.defaultCamera)
 		this.container = el;
 
-		this.renderer = window.renderer = new WebGLRenderer({antialias: true})
+		this.renderer = new WebGLRenderer({antialias: true})
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( el.clientWidth, el.clientHeight );
 
-		this.options = Object.assign({}, options)
+		if (this.options.isBgColor) {
+			this.bg = createBackground({
+				colors: [this.options.bgColor1, this.options.bgColor2]
+			});
+	
+			this.bg.name = 'BG';
+			this.bg.renderOrder = -1;
+		}
+
 
 		// 镜头控制器
 		this.controls = new OrbitControls( this.defaultCamera, this.renderer.domElement );
-    this.controls.autoRotate = true;
-    // this.controls.autoRotateSpeed = -10;
+    this.controls.autoRotate = this.options.autoRotate;
+    this.controls.autoRotateSpeed = this.options.autoRotateSpeed;
     this.controls.screenSpacePanning = true;
+
+		if (this.options.stats) {
+			const stats = Stats()
+			this.stats = stats;
+		}
+		
 		
 		this.container.appendChild(this.renderer.domElement);
+
+		if (this.options.stats) {
+			this.container.appendChild(this.stats.dom);
+		}
 
 	}
 
@@ -149,11 +188,12 @@ export default class ThreeDViewer {
 			.setDRACOLoader( DRACO_LOADER )
 			.setKTX2Loader(KTX2_LOADER.detectSupport( this.renderer ))
 			.setMeshoptDecoder( MeshoptDecoder );
+			this.emit('preLoad', [loader], this)
 
 			loader.loadAsync(url, (event) => {
-				
+				this.emit('loading', [event], this)
 			}).then((gltf) => {
-				console.log(gltf);
+				this.emit('loaded', [gltf], this)
 				
 				const scene = gltf.scene
 
@@ -184,6 +224,7 @@ export default class ThreeDViewer {
     }
   }
 
+	// 只渲染一次
 	setContent(object: Group) {
 		const box = new Box3().setFromObject(object);
     const size = box.getSize(new Vector3()).length();
@@ -195,6 +236,7 @@ export default class ThreeDViewer {
     object.position.y += (object.position.y - center.y);
     object.position.z += (object.position.z - center.z);
     this.controls.maxDistance = size * 10;
+
     this.defaultCamera.near = size / 100;
     this.defaultCamera.far = size * 100;
     this.defaultCamera.updateProjectionMatrix();
@@ -220,15 +262,19 @@ export default class ThreeDViewer {
 		this.controls.saveState();
 
 		this.scene.add(object)
-		this.content = object
-		window.content = this.content
 
-		this.printGraph(this.content);
+		if (this.options.isBgColor) {
+			this.scene.add(this.bg);
+		}
+		this.content = object
+
+		// this.printGraph(this.content);
 	}
 
 	updateLights () {
     const state = this.state;
     const lights = this.lights;
+		const options = this.options;
 
     if (state.addLights && !lights.length) {
       this.addLights();
@@ -239,15 +285,17 @@ export default class ThreeDViewer {
     this.renderer.toneMappingExposure = state.exposure;
 
     if (lights.length === 2) {
-      lights[0].intensity = state.ambientIntensity;
-      lights[0].color.setHex(state.ambientColor);
-      lights[1].intensity = state.directIntensity;
-      lights[1].color.setHex(state.directColor);
+      lights[0].intensity = options.ambientIntensity;
+      lights[0].color.setHex(options.ambientColor);
+      lights[1].intensity = options.directIntensity;
+      lights[1].color.setHex(options.directColor);
     }
   }
 
+	// 增加两种光照
 	addLights () {
     const state = this.state;
+		const options = this.options;
 
     if (this.options.preset === Preset.ASSET_GENERATOR) {
       const hemiLight = new HemisphereLight();
@@ -257,11 +305,11 @@ export default class ThreeDViewer {
       return;
     }
 
-    const light1  = new AmbientLight(state.ambientColor, state.ambientIntensity);
+    const light1  = new AmbientLight(options.ambientColor, options.ambientIntensity);
     light1.name = 'ambient_light';
     this.defaultCamera.add( light1 );
 
-    const light2  = new DirectionalLight(state.directColor, state.directIntensity);
+    const light2  = new DirectionalLight(options.directColor, options.directIntensity);
     light2.position.set(0.5, 0, 0.866); // ~60º
     light2.name = 'main_light';
     this.defaultCamera.add( light2 );
@@ -276,19 +324,19 @@ export default class ThreeDViewer {
 
   }
 
+	// TODO: 暂不支持动画
 	animate (time) {
 
     requestAnimationFrame( this.animate );
 
-    const dt = (time - this.prevTime) / 1000;
-
-		// autoRotate
     this.controls.update();
     this.render();
 
     this.prevTime = time;
 
-
+		if (this.options.stats) {
+			this.stats.update();
+		}
   }
 
 	render() {
@@ -300,6 +348,5 @@ export default class ThreeDViewer {
     console.group(' <' + node.type + '> ' + node.name);
     node.children.forEach((child) => this.printGraph(child));
     console.groupEnd();
-
   }
 }
