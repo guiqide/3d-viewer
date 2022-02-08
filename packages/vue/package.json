@@ -5,7 +5,7 @@
   "author": "kevingui <kevingui@tencent.com>",
   "homepage": "https://github.com/guiqide/3d-viewer/tree/main/packages/vue#readme",
   "license": "MIT",
-  "main": "lib/vue.js",
+  "main": "lib/index.vue",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -18,9 +18,7 @@
     "url": "git+https://github.com/guiqide/3d-viewer.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
-    "dev": "tsc -w",
-    "build": "tsc"
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
     "url": "https://github.com/guiqide/3d-viewer/issues"

@@ -1,20 +1,21 @@
 <template>
-  <three-d-viewer url="/skate.glb" :options="options" class="sceen" />
+  <ThreeDViewer :url="url" :options="options" class="sceen" />
 </template>
 
 <script>
-import { onMounted, reactive, toRefs } from '@vue/runtime-core'
+import { onMounted, reactive, toRefs } from 'vue'
+import ThreeDViewer from '3d-viewer-vue'
 
 export default {
   name: 'App',
+  components: {
+    ThreeDViewer
+    },
   setup(_, context) {
     const state = reactive({
       options: {
       },
-      url: 'skate.glb'
-    })
-    onMounted(() => {
-      console.log(this, context)
+      url: '/skate.glb'
     })
 
     return {
