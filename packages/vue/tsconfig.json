@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "es2015",
+    "outDir": "./lib",
+    "lib": ["es2015", "dom"],
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "typeRoots": ["./node_modules/@types"]
+}

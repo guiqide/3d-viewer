@@ -1,6 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "module": "es2015",
   "compilerOptions": {
     "outDir": "./lib",
     "lib": ["ES2015", "dom"],

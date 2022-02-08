@@ -2,6 +2,7 @@ const rollup = require('rollup');
 const typescript = require('@rollup/plugin-typescript');
 const nodeResolve = require('@rollup/plugin-node-resolve').nodeResolve;
 const commonjs = require('@rollup/plugin-commonjs');
+const glslify = require('rollup-plugin-glslify');
 const path = require('path');
 
 
@@ -25,9 +26,22 @@ const outputRuntimeOptions = {
   exports: 'auto'
 }
 
-const pluginOptions = [typescript({
-  tsconfig: path.resolve('./tsconfig.json')
-}), nodeResolve(), commonjs()]
+const pluginOptions = [
+  glslify({
+    include: [
+      'src/**/*.vs',
+      'src/**/*.fs',
+      'src/**/*.vert',
+      'src/**/*.frag',
+      'src/**/*.glsl'
+    ],
+  }),
+  typescript({
+    tsconfig: path.resolve('./tsconfig.json')
+  }),
+  nodeResolve(),
+  commonjs()
+]
 
 const external = [
   'three',

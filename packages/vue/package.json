@@ -18,12 +18,17 @@
     "url": "git+https://github.com/guiqide/3d-viewer.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "dev": "tsc -w",
+    "build": "tsc"
   },
   "bugs": {
     "url": "https://github.com/guiqide/3d-viewer/issues"
   },
-  "peerDependencies": {
+  "dependencies": {
+    "3d-viewer-core": "^1.0.1"
+  },
+  "devDependencies": {
     "vue": "^3.2.26"
   }
 }
