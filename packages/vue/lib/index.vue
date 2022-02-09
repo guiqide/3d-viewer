@@ -3,36 +3,42 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { version } from 'vue'
 import ThreeDViewer from '3d-viewer-core'
+
+const transferUrl = (url) => {
+  return typeof url === 'string'
+      ? url
+      : URL.createObjectURL(url);
+}
 
 export default {
   name: 'ThreeDViewer',
   props: ['url', 'options'],
-  setup(props, {emit}) {
-    onMounted(() => {
-      const config = Object.assign({}, options, props.options);
-      const viewer = new ThreeDViewer(viewRef.value, config);
+  mounted() {
+    let viewRef = null
+    if (version > '3.0') {
+      viewRef = this.$el
+    } else {
+      viewRef = this.$refs.viewRef
+    }
 
-      viewer.on('preLoad', (loader, threedViewer) => {
-        emit('preLoad', [loader, threedViewer]);
-      })
-
-      viewer.on('loading', (event, threedViewer) => {
-        emit('loading', [event, threedViewer]);
-      })
-
-      viewer.on('loaded', (gltf, threedViewer) => {
-        emit('loaded', [gltf, threedViewer]);
-      })
-
-      viewer.load(transferUrl(props.url)).then((gltf) => {
-        console.log(gltf);
-      })
+    const config = Object.assign({}, this.options);
+    const viewer = new ThreeDViewer(viewRef, config);
+    viewer.on('preLoad', (loader, threedViewer) => {
+      this.$emit('preLoad', [loader, threedViewer]);
     })
-    const viewRef = ref(null);
 
-    return { viewRef }
+    viewer.on('loading', (event, threedViewer) => {
+      this.$emit('loading', [event, threedViewer]);
+    })
+
+    viewer.on('loaded', (gltf, threedViewer) => {
+      this.$emit('loaded', [gltf, threedViewer]);
+    })
+
+    viewer.load(transferUrl(this.url)).then((gltf) => {
+    })
   },
 }
 </script>

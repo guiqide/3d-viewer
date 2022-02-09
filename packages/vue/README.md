@@ -2,4 +2,7 @@
 
 <ThreedViewer options="" loaded="func" preLoad="fun" url="">
 
-我们需要通过
+url可以传入一个http链接，也可以传入一个blob
+
+## 支持vue2和vue3
+

@@ -37,6 +37,7 @@ const transferUrl = (url) => {
       : URL.createObjectURL(url);
 }
 
+
 viewer.load(transferUrl('./skate.glb')).then((gltf) => {
   console.log(gltf);
   
